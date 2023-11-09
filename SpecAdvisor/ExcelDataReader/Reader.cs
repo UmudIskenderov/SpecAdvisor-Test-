@@ -18,13 +18,14 @@ namespace SpecAdvisor.ExcelDataReader
 
             List<Specialty> specialties = new List<Specialty>();
 
+            int id = 1;
+            string universityName = "";
+            string groupName = "";
             using (ExcelPackage package = new ExcelPackage(fileInfo))
             {
                 // Get the first worksheet in the workbook
                 int sheetCount = package.Workbook.Worksheets.Count;
-                int id = 1;
-                string universityName = "";
-                string groupName = "";
+                
                 for (int i = 0; i < sheetCount; i++)
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[i];
@@ -68,6 +69,8 @@ namespace SpecAdvisor.ExcelDataReader
                             
                             specialty.Group = group == "I" ? Group.I : group == "II" ? Group.II : group == "III" ? Group.III : group == "IV" ? Group.IV : Group.V;
                             specialty.Name = worksheet.Cells[row, 2].Value.ToString();
+                            if (specialty.Name.Contains("tədris ingilis dilində")) specialty.EducationLanguage = EducationLanguage.En;
+                            else specialty.EducationLanguage = EducationLanguage.Az;
                             specialty.IsVisual = worksheet.Cells[row, 3].Value.ToString()[0] == 'Ə' ? true : false;
 
                             string[] scores = worksheet.Cells[row, 4].GetValue<string>().Replace(" )", "").Replace("( ", "").Replace("(", "").Replace(")", "").Trim().Split();
@@ -81,10 +84,19 @@ namespace SpecAdvisor.ExcelDataReader
                             }
                             if (scores.Length > 1 && scores[1] != "-")
                             {
-                                specialty.Id = id++;
-                                specialty.IsPaid = false;
-                                specialty.AccessScore = Convert.ToDouble(scores[1]);
-                                specialties.Add(specialty);
+                                Specialty specialty1 = new Specialty();
+                                specialty1.University = new University()
+                                {
+                                    Name = universityName,
+                                };
+                                specialty1.Group = specialty.Group;
+                                specialty1.Name = specialty.Name;
+                                specialty1.EducationLanguage = specialty.EducationLanguage;
+                                specialty1.IsVisual = specialty.IsVisual;
+                                specialty1.Id = id++;
+                                specialty1.IsPaid = false;
+                                specialty1.AccessScore = Convert.ToDouble(scores[1]);
+                                specialties.Add(specialty1);
                             }
                         }
                     }
@@ -92,7 +104,7 @@ namespace SpecAdvisor.ExcelDataReader
             }
             foreach (var specialty in specialties)
             {
-                Console.WriteLine($"{specialty.Id} {specialty.University.Name} {specialty.Group} {specialty.Name} {specialty.IsVisual} {specialty.AccessScore} {specialty.IsPaid}");
+                Console.WriteLine($"{specialty.Id} {specialty.University.Name} {specialty.Group} {specialty.Name} {specialty.IsVisual} {specialty.AccessScore} {specialty.IsPaid} {specialty.EducationLanguage} {specialty.Sector}");
             }
 
             return specialties;

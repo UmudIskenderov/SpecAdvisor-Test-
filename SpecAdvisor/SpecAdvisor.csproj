@@ -59,9 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Specialty.cs" />
     <Compile Include="Entities\University.cs" />
+    <Compile Include="Enums\EducationLanguage.cs" />
     <Compile Include="Enums\Group.cs" />
+    <Compile Include="Enums\Sector.cs" />
     <Compile Include="ExcelDataReader\Reader.cs" />
     <Compile Include="Models\InputBachelorData.cs" />
     <Compile Include="Program.cs" />
