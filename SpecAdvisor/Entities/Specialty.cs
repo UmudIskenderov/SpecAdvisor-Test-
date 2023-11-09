@@ -16,5 +16,7 @@ namespace SpecAdvisor.Entities
         public bool IsVisual { get; set; }
         public bool IsPaid { get; set; }
         public double AccessScore { get; set; }
+        public Sector Sector { get; set; } = Sector.Az;
+        public EducationLanguage EducationLanguage { get; set; }
     }
 }

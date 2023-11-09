@@ -8,7 +8,9 @@ namespace SpecAdvisor.Entities
 {
     public class University
     {
-        public int Id { get; set; }
+        public byte Id { get; set; }
+        public City City { get; set; }
         public string Name { get; set; }
+        public bool IsPrivate { get; set; }
     }
 }
